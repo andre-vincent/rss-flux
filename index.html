@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lecteur RSS minimaliste basé sur OPML pour GitHub Pages">
+    <title>📡 Lecteur RSS Flux</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- En-tête -->
+        <header class="header">
+            <div class="header-left">
+                <h1>📡 Lecteur RSS</h1>
+            </div>
+            <div class="header-right">
+                <button id="btnTheme" class="btn-icon" title="Basculer le thème">🌙</button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <!-- Barre latérale -->
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <h2>Mes Flux</h2>
+                </div>
+
+                <!-- Boutons d'action -->
+                <div class="sidebar-actions">
+                    <button id="btnImportOPML" class="btn-primary" title="Importer un fichier OPML">
+                        ➕ Importer OPML
+                    </button>
+                    <button id="btnExportOPML" class="btn-secondary" title="Exporter les flux en OPML">
+                        ⬇️ Exporter
+                    </button>
+                </div>
+
+                <!-- Champ de recherche -->
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    class="search-input" 
+                    placeholder="Chercher un flux..."
+                >
+
+                <!-- Liste des flux -->
+                <div class="flux-list" id="fluxList">
+                    <!-- Les flux seront générés ici par JavaScript -->
+                </div>
+
+                <!-- Message vide -->
+                <div class="empty-state" id="emptyState" style="display: none;">
+                    <p>Aucun flux. Importez un fichier OPML pour commencer!</p>
+                </div>
+            </aside>
+
+            <!-- Zone principale -->
+            <main class="main-area">
+                <!-- En-tête du flux sélectionné -->
+                <div class="feed-header" id="feedHeader" style="display: none;">
+                    <h2 id="feedTitle">Sélectionnez un flux</h2>
+                    <p id="feedDescription"></p>
+                </div>
+
+                <!-- Grille d'articles -->
+                <div class="articles-grid" id="articlesGrid">
+                    <div class="empty-state">
+                        <p>Sélectionnez un flux pour voir les articles</p>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modale : Détail article -->
+    <div class="modal" id="articleModal" style="display: none;">
+        <div class="modal-content">
+            <button class="modal-close" id="closeArticleModal">&times;</button>
+            <div class="modal-body">
+                <h2 id="modalTitle"></h2>
+                <p class="modal-meta" id="modalMeta"></p>
+                <div id="modalImage"></div>
+                <div id="modalContent"></div>
+                <a id="modalLink" target="_blank" class="btn-primary" style="display: inline-block; margin-top: 1rem;">
+                    Lire l'article complet →
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Input caché pour OPML -->
+    <input type="file" id="opmlInput" accept=".opml,.xml" style="display: none;">
+
+    <!-- Scripts -->
+    <script src="js/opml-parser.js"></script>
+    <script src="js/feed-manager.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
