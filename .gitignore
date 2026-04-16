@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two "." 
+Icon
+
+# Thumbnails
+Thumbs.db
+
+# TextWrangler preferences
+*.wbe
