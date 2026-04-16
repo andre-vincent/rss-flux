@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+  <head>
+    <title>Exemple de Flux RSS</title>
+    <dateCreated>2026-04-16T00:00:00Z</dateCreated>
+    <docs>http://opml.org/spec2.opml</docs>
+  </head>
+  <body>
+    <outline type="rss" 
+             text="Les Échos" 
+             title="Les Échos - Accueil" 
+             xmlUrl="https://www.lesechos.fr/rss/derniere-minute.xml" 
+             htmlUrl="https://www.lesechos.fr" />
+    
+    <outline type="rss" 
+             text="France Info" 
+             title="France Info - À la une" 
+             xmlUrl="https://www.francetvinfo.fr/rss/alaune.xml" 
+             htmlUrl="https://www.francetvinfo.fr" />
+    
+    <outline type="rss" 
+             text="Korben" 
+             title="Korben - Blog" 
+             xmlUrl="https://korben.info/feed" 
+             htmlUrl="https://korben.info" />
+    
+    <outline type="rss" 
+             text="NextInpact" 
+             title="Nextinpact - Informatique" 
+             xmlUrl="https://www.nextinpact.com/rss/news.php" 
+             htmlUrl="https://www.nextinpact.com" />
+    
+    <outline type="rss" 
+             text="Medium - Technologie" 
+             title="Medium Technology" 
+             xmlUrl="https://medium.com/feed/tag/technology" 
+             htmlUrl="https://medium.com/tag/technology" />
+  </body>
+</opml>
