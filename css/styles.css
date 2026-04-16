@@ -1,0 +1,484 @@
+/**
+ * Styles personnalisés pour Lecteur RSS Flux
+ * Utilise le framework Simple.css comme base
+ */
+
+/* ====================================
+   VARIABLES CSS
+   ==================================== */
+
+:root {
+    /* Simple.css utilise déjà des variables */
+    --spacing: 1rem;
+    --transition: 0.2s ease-in-out;
+}
+
+/* Thème sombre */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --accent-color: #ff6b6b;
+        --primary-color: #0d47a1;
+    }
+}
+
+/* ====================================
+   STYLES GÉNÉRAUX
+   ==================================== */
+
+body {
+    padding: 0;
+    margin: 0;
+}
+
+/* En-tête avec flexbox */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--form-element-border-color);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+/* Bouton thème */
+#btnTheme {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: transform var(--transition);
+}
+
+#btnTheme:hover {
+    transform: rotate(20deg);
+}
+
+#btnTheme:active {
+    transform: rotate(-20deg);
+}
+
+/* ====================================
+   BARRE LATÉRALE (ASIDE)
+   ==================================== */
+
+aside {
+    display: flex;
+    flex-direction: column;
+}
+
+aside h2 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+/* Boutons de la barre latérale */
+aside button {
+    margin-bottom: 0.5rem;
+    width: 100%;
+}
+
+aside button[secondary] {
+    background-color: transparent;
+    border: 1px solid var(--form-element-border-color);
+}
+
+/* Input de recherche */
+aside input[type="text"] {
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+/* Navigation des flux */
+#fluxList {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-bottom: 1rem;
+}
+
+/* Éléments de flux */
+.flux-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    background-color: var(--form-element-background-color);
+    border: 1px solid var(--form-element-border-color);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.flux-item:hover {
+    background-color: var(--form-element-valid-border-color);
+    opacity: 0.8;
+}
+
+.flux-item.active {
+    background-color: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+    font-weight: bold;
+}
+
+.flux-item-text {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.9rem;
+}
+
+.flux-item-delete {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 0 0.5rem;
+    opacity: 0;
+    transition: opacity var(--transition);
+}
+
+.flux-item:hover .flux-item-delete {
+    opacity: 1;
+}
+
+.flux-item.active .flux-item-delete {
+    opacity: 1;
+    color: white;
+}
+
+/* ====================================
+   ZONE PRINCIPALE (ARTICLE)
+   ==================================== */
+
+article {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding-right: 1rem;
+}
+
+/* En-tête du flux */
+#feedHeader {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--accent-color);
+}
+
+#feedHeader h2 {
+    margin: 0 0 0.5rem 0;
+}
+
+#feedHeader p {
+    margin: 0;
+    color: var(--muted-color);
+}
+
+/* ====================================
+   GRILLE D'ARTICLES
+   ==================================== */
+
+#articlesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    align-content: start;
+}
+
+/* Cartes d'articles */
+.article-card {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--form-element-background-color);
+    border: 1px solid var(--form-element-border-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all var(--transition);
+    height: 100%;
+}
+
+.article-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: var(--accent-color);
+}
+
+/* Image de l'article */
+.article-image {
+    width: 100%;
+    height: 160px;
+    background-color: var(--form-element-border-color);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.article-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition);
+}
+
+.article-card:hover .article-image img {
+    transform: scale(1.05);
+}
+
+/* Contenu de l'article */
+.article-body {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0.5rem;
+}
+
+.article-title {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 0;
+    line-height: 1.3;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.article-meta {
+    font-size: 0.8rem;
+    color: var(--muted-color);
+    margin: 0;
+}
+
+.article-description {
+    font-size: 0.9rem;
+    color: var(--muted-color);
+    margin: 0;
+    flex: 1;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    line-height: 1.4;
+}
+
+.article-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--form-element-border-color);
+}
+
+.article-star {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.3rem;
+    padding: 0;
+    transition: transform var(--transition);
+}
+
+.article-star:hover {
+    transform: scale(1.3);
+}
+
+/* ====================================
+   MODALE (DIALOG)
+   ==================================== */
+
+dialog {
+    max-width: 600px;
+    width: 90%;
+    border-radius: var(--border-radius);
+}
+
+dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+dialog article {
+    padding: 1.5rem;
+}
+
+#modalTitle {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+#modalMeta {
+    margin: 0 0 1rem 0;
+}
+
+#modalImage {
+    margin: 1rem 0;
+}
+
+#modalImage img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--border-radius);
+    max-height: 300px;
+    object-fit: cover;
+}
+
+#modalContent {
+    line-height: 1.8;
+    margin: 1rem 0;
+}
+
+#modalContent p {
+    margin: 0.5rem 0;
+}
+
+#modalContent a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+#modalContent a:hover {
+    text-decoration: underline;
+}
+
+dialog footer {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--form-element-border-color);
+}
+
+dialog footer a {
+    display: inline-block;
+}
+
+/* ====================================
+   RESPONSIVE DESIGN
+   ==================================== */
+
+@media (max-width: 768px) {
+    main > div {
+        grid-template-columns: 1fr;
+    }
+
+    aside {
+        grid-column: 1;
+        grid-row: 1;
+        border-bottom: 1px solid var(--form-element-border-color);
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+    }
+
+    #fluxList {
+        max-height: 200px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        overflow-x: auto;
+    }
+
+    .flux-item {
+        flex: 0 1 auto;
+        min-width: 120px;
+    }
+
+    #articlesGrid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+
+    article {
+        padding-right: 0;
+    }
+
+    header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    header h1 {
+        margin-bottom: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #articlesGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .article-image {
+        height: 120px;
+    }
+
+    #fluxList {
+        flex-direction: column;
+        max-height: none;
+    }
+
+    .flux-item {
+        min-width: auto;
+        width: 100%;
+    }
+
+    dialog {
+        width: 95%;
+    }
+
+    header h1 {
+        font-size: 1.2rem;
+    }
+}
+
+/* ====================================
+   ACCESSIBILITÉ
+   ==================================== */
+
+/* Focus visible pour la navigation au clavier */
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+/* ====================================
+   ANIMATIONS
+   ==================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+    * {
+        scroll-behavior: smooth;
+    }
+}
+
+/* ====================================
+   SCROLLBAR PERSONNALISÉ
+   ==================================== */
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: var(--form-element-background-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--form-element-border-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--muted-color);
+}
