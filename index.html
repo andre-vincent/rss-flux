@@ -3,23 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Lecteur RSS Statique</title>
+    <title>Lecteur RSS Statique</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>Flux RSS</h1>
-        <nav id="categories"></nav>
-    </header>
-    
-    <main id="app">
-        <aside id="sidebar">
-            <ul id="feed-list"></ul>
-        </aside>
-        <section id="content">
-            <div id="loader" class="hidden">Chargement des articles…</div>
-            <div id="articles">Séléctionnez un flux pour commencer.</div>
-        </section>
+
+    <div id="sidebar">
+        <h2>Mes Flux</h2>
+        <nav id="feed-menu">
+            <p class="status">Chargement de l’OPML…</p>
+        </nav>
+    </div>
+
+    <main id="main-content">
+        <header>
+            <h1 id="feed-title">Sélectionnez un flux</h1>
+        </header>
+        <section id="articles-container">
+            </section>
     </main>
 
     <script src="script.js"></script>
