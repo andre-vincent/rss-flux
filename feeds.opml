@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+  <head><title>Mes Flux</title></head>
+  <body>
+    <outline text="Technologie" title="Technologie">
+      <outline type="rss" text="Le Monde - Pixels" xmlUrl="https://www.lemonde.fr/pixels/rss_full.xml" />
+      <outline type="rss" text="The Verge" xmlUrl="https://www.theverge.com/rss/index.xml" />
+    </outline>
+  </body>
+</opml>
