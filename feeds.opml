@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <opml version="2.0">
-  <head><title>Mes Flux</title></head>
+  <head>
+    <title>Mes Abonnements RSS</title>
+  </head>
   <body>
-    <outline text="Technologie" title="Technologie">
-      <outline type="rss" text="Le Monde - Pixels" xmlUrl="https://www.lemonde.fr/pixels/rss_full.xml" />
-      <outline type="rss" text="The Verge" xmlUrl="https://www.theverge.com/rss/index.xml" />
+    <outline text="Actualités">
+      <outline type="rss" text="Le Monde" xmlUrl="https://www.lemonde.fr/rss/une.xml" />
+      <outline type="rss" text="Radio-Canada" xmlUrl="https://ici.radio-canada.ca/rss/nouvelles.xml" />
+    </outline>
+    <outline text="Tech">
+      <outline type="rss" text="Next" xmlUrl="https://www.nextinpact.com/rss/news.xml" />
     </outline>
   </body>
 </opml>
