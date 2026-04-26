@@ -1,13 +1,12 @@
 // Configuration
 const OPML_PATH = 'feeds.opml';
-// Proxy gratuit pour transformer le RSS en JSON (évite le CORS)
 const API_PROXY = 'https://api.rss2json.com/v1/api.json?rss_url=';
 
 const feedMenu = document.getElementById('feed-menu');
 const articlesContainer = document.getElementById('articles-container');
 const feedTitle = document.getElementById('feed-title');
 
-// 1. Initialisation : Chargement de l'OPML
+// 1. Initialisation : Chargement de l’OPML
 async function init() {
     try {
         const response = await fetch(OPML_PATH);
@@ -16,7 +15,7 @@ async function init() {
         const xmlDoc = parser.parseFromString(xmlText, "text/xml");
         
         const outlines = xmlDoc.querySelectorAll('outline[type="rss"]');
-        feedMenu.innerHTML = ''; // On vide le message de chargement
+        feedMenu.innerHTML = ''; 
 
         outlines.forEach(outline => {
             const btn = document.createElement('button');
@@ -24,14 +23,22 @@ async function init() {
             btn.onclick = () => loadRSS(outline.getAttribute('xmlUrl'), btn.textContent);
             feedMenu.appendChild(btn);
         });
+
+        // --- NOUVEAUTÉ : Chargement du premier flux par défaut ---
+        if (outlines.length > 0) {
+            const firstFeed = outlines[0];
+            loadRSS(firstFeed.getAttribute('xmlUrl'), firstFeed.getAttribute('text'));
+        }
+        // ---------------------------------------------------------
+
     } catch (error) {
-        feedMenu.innerHTML = '<p class="error">Erreur de chargement du fichier OPML.</p>';
+        feedMenu.innerHTML = '<p class="error">Erreur de chargement du fichier OPML&#8239;.</p>';
     }
 }
 
-// 2. Chargement d'un flux spécifique
+// 2. Chargement d’un flux spécifique
 async function loadRSS(url, title) {
-    feedTitle.textContent = `Chargement : ${title}…`;
+    feedTitle.textContent = `Chargement&#8239;: ${title}…`;
     articlesContainer.innerHTML = '<div class="loader"></div>';
 
     try {
@@ -51,7 +58,7 @@ async function loadRSS(url, title) {
             throw new Error();
         }
     } catch (error) {
-        articlesContainer.innerHTML = '<p class="error">Impossible de lire ce flux RSS (problème de source ou de proxy).</p>';
+        articlesContainer.innerHTML = '<p class="error">Impossible de lire ce flux RSS (problème de source ou de proxy)&#8239;.</p>';
     }
 }
 
