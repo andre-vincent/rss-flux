@@ -1,54 +1,57 @@
-const OPML_FILE = 'feeds.opml';
-const RSS_TO_JSON_API = 'https://api.rss2json.com/v1/api.json?rss_url=';
+// Configuration
+const OPML_PATH = 'feeds.opml';
+// Proxy gratuit pour transformer le RSS en JSON (évite le CORS)
+const API_PROXY = 'https://api.rss2json.com/v1/api.json?rss_url=';
 
+const feedMenu = document.getElementById('feed-menu');
+const articlesContainer = document.getElementById('articles-container');
+const feedTitle = document.getElementById('feed-title');
+
+// 1. Initialisation : Chargement de l'OPML
 async function init() {
     try {
-        const response = await fetch(OPML_FILE);
-        const text = await response.text();
+        const response = await fetch(OPML_PATH);
+        const xmlText = await response.text();
         const parser = new DOMParser();
-        const xml = parser.parseFromString(text, "text/xml");
+        const xmlDoc = parser.parseFromString(xmlText, "text/xml");
         
-        const feeds = xml.querySelectorAll('outline[type="rss"]');
-        const feedList = document.getElementById('feed-list');
+        const outlines = xmlDoc.querySelectorAll('outline[type="rss"]');
+        feedMenu.innerHTML = ''; // On vide le message de chargement
 
-        feeds.forEach(feed => {
-            const li = document.createElement('li');
-            li.textContent = feed.getAttribute('text');
-            li.dataset.url = feed.getAttribute('xmlUrl');
-            li.addEventListener('click', () => loadFeed(li.dataset.url));
-            feedList.appendChild(li);
+        outlines.forEach(outline => {
+            const btn = document.createElement('button');
+            btn.textContent = outline.getAttribute('text');
+            btn.onclick = () => loadRSS(outline.getAttribute('xmlUrl'), btn.textContent);
+            feedMenu.appendChild(btn);
         });
-    } catch (err) {
-        console.error("Erreur lors du chargement de l'OPML :", err);
+    } catch (error) {
+        feedMenu.innerHTML = '<p class="error">Erreur de chargement du fichier OPML.</p>';
     }
 }
 
-async function loadFeed(url) {
-    const container = document.getElementById('articles');
-    const loader = document.getElementById('loader');
-    
-    loader.classList.remove('hidden');
-    container.innerHTML = '';
+// 2. Chargement d'un flux spécifique
+async function loadRSS(url, title) {
+    feedTitle.textContent = `Chargement : ${title}…`;
+    articlesContainer.innerHTML = '<div class="loader"></div>';
 
     try {
-        const res = await fetch(`${RSS_TO_JSON_API}${encodeURIComponent(url)}`);
+        const res = await fetch(API_PROXY + encodeURIComponent(url));
         const data = await res.json();
 
         if (data.status === 'ok') {
-            data.items.forEach(item => {
-                const article = document.createElement('article');
-                article.innerHTML = `
+            feedTitle.textContent = title;
+            articlesContainer.innerHTML = data.items.map(item => `
+                <article class="feed-item">
                     <h3><a href="${item.link}" target="_blank">${item.title}</a></h3>
-                    <small>Publié le : ${new Date(item.pubDate).toLocaleDateString()}</small>
-                    <p>${item.description}</p>
-                `;
-                container.appendChild(article);
-            });
+                    <div class="meta">Par ${item.author || 'Anonyme'} — ${new Date(item.pubDate).toLocaleDateString('fr-FR')}</div>
+                    <div class="description">${item.description}</div>
+                </article>
+            `).join('');
+        } else {
+            throw new Error();
         }
-    } catch (err) {
-        container.innerHTML = 'Impossible de charger ce flux.';
-    } finally {
-        loader.classList.add('hidden');
+    } catch (error) {
+        articlesContainer.innerHTML = '<p class="error">Impossible de lire ce flux RSS (problème de source ou de proxy).</p>';
     }
 }
 
