@@ -1,7 +1,12 @@
 :root {
-    --bg: #ffffff;
-    --sidebar-bg: #f4f4f9;
-    --accent: #2c3e50;
+    /* Couleurs à haut contraste */
+    --bg-main: #ffffff;           /* Fond blanc pur */
+    --bg-sidebar: #f8f9fa;      /* Gris très clair pour la structure */
+    --text-main: #1a1a1a;       /* Noir doux pour éviter la fatigue visuelle tout en restant contrasté */
+    --text-meta: #4d4d4d;       /* Gris foncé (Contraste > 7:1 sur blanc) */
+    --accent-color: #002db3;    /* Bleu profond pour les liens et titres */
+    --border-color: #707070;    /* Bordures visibles */
+    --hover-bg: #e6e6e6;
 }
 
 body {
@@ -9,39 +14,52 @@ body {
     margin: 0;
     display: flex;
     height: 100vh;
-    color: #333;
+    color: var(--text-main);
+    background-color: var(--bg-main);
+    line-height: 1.6; /* Améliore la lisibilité */
 }
 
 /* Barre latérale */
 #sidebar {
     width: 280px;
-    background: var(--sidebar-bg);
-    border-right: 1px solid #ddd;
+    background: var(--bg-sidebar);
+    border-right: 2px solid var(--border-color); /* Bordure renforcée */
     display: flex;
     flex-direction: column;
     padding: 20px;
 }
 
+#sidebar h2 {
+    color: var(--text-main);
+    font-size: 1.5rem;
+    border-bottom: 2px solid var(--text-main);
+    padding-bottom: 10px;
+}
+
 #feed-menu {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px; /* Espacement accru pour faciliter le clic */
     overflow-y: auto;
 }
 
 #feed-menu button {
     text-align: left;
-    padding: 10px;
-    border: none;
-    background: white;
-    border-radius: 6px;
+    padding: 12px;
+    border: 2px solid var(--accent-color); /* Boutons clairement délimités */
+    background: var(--bg-main);
+    color: var(--accent-color);
+    border-radius: 4px;
     cursor: pointer;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    transition: background 0.2s;
+    font-weight: bold;
+    transition: all 0.2s;
 }
 
-#feed-menu button:hover {
-    background: #e0e7ff;
+#feed-menu button:hover, 
+#feed-menu button:focus {
+    background: var(--accent-color);
+    color: var(--bg-main);
+    outline: 3px solid orange; /* Indicateur de focus pour la navigation au clavier */
 }
 
 /* Zone principale */
@@ -51,37 +69,52 @@ body {
     padding: 40px;
 }
 
+#feed-title {
+    color: var(--text-main);
+    font-size: 2rem;
+    margin-bottom: 30px;
+}
+
 #articles-container {
-    max-width: 800px;
+    max-width: 75ch; /* Largeur optimale pour la lecture (environ 75 caractères) */
     margin: 0 auto;
 }
 
 .feed-item {
-    margin-bottom: 40px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 20px;
+    margin-bottom: 50px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 30px;
 }
 
+/* Liens contrastés */
 .feed-item h3 a {
-    color: var(--accent);
+    color: var(--accent-color);
+    text-decoration: underline; /* Soulignage pour identifier le lien sans dépendre de la couleur */
+}
+
+.feed-item h3 a:hover {
+    color: #001a66;
     text-decoration: none;
 }
 
 .feed-item .meta {
-    font-size: 0.85rem;
-    color: #888;
-    margin: 10px 0;
+    font-size: 0.95rem;
+    color: var(--text-meta);
+    margin: 12px 0;
+    font-weight: 500;
 }
 
 .feed-item .description {
-    line-height: 1.6;
+    font-size: 1.1rem;
+    color: var(--text-main);
 }
 
+/* Accessibilité du loader */
 .loader {
-    width: 30px;
-    height: 30px;
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid var(--accent);
+    width: 40px;
+    height: 40px;
+    border: 4px solid #ccc;
+    border-top: 4px solid var(--accent-color);
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
