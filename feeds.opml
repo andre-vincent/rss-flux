@@ -5,7 +5,7 @@
 		<title>Subscriptions-QUÉBEC.opml</title>
 	</head>
 <body>
-	<outline text="À bâbord !" title="À bâbord !" description="" type="rss" version="RSS" htmlUrl="https://www.ababord.org/" xmlUrl="https://www.ababord.org/spip.php?page=backend"/>
+	<outline text="L'autre information" title="L'autre information" description="" type="rss" version="RSS" htmlUrl="https://lautre.info/" xmlUrl="https://lautre.info/spip.php?page=backend"/>	<outline text="À bâbord !" title="À bâbord !" description="" type="rss" version="RSS" htmlUrl="https://www.ababord.org/" xmlUrl="https://www.ababord.org/spip.php?page=backend"/>
 	<outline text="Archives Révolutionnaires" title="Archives Révolutionnaires" description="" type="rss" version="RSS" htmlUrl="https://archivesrevolutionnaires.com/" xmlUrl="https://archivesrevolutionnaires.com/feed/"/>
 	<outline text="Centre Internationaliste Ryerson Fondation Aubin" title="Centre Internationaliste Ryerson Fondation Aubin" description="" type="rss" version="RSS" htmlUrl="https://centreinternationalisterfa.org/" xmlUrl="https://centreinternationalisterfa.org/feed/"/>
 	<outline text="Communiqué – QS" title="Communiqué – QS" description="" type="rss" version="RSS" htmlUrl="https://api-wp.quebecsolidaire.net/" xmlUrl="https://api-wp.quebecsolidaire.net/feed/?post_type=articles&amp;types=communiques-de-presse"/>
@@ -14,7 +14,6 @@
 	<outline text="Journal des Alternatives" title="Journal des Alternatives" description="" type="rss" version="RSS" htmlUrl="https://alter.quebec/" xmlUrl="https://alter.quebec/feed/"/>
 	<outline text="Journal le Mouton Noir" title="Journal le Mouton Noir" description="" type="rss" version="RSS" htmlUrl="https://www.moutonnoir.com/" xmlUrl="https://www.moutonnoir.com/feed/"/>
 	<outline text="L'aut'Journal" title="L'aut'Journal" description="" type="rss" version="RSS" htmlUrl="https://www.lautjournal.info/RssFeeds/" xmlUrl="https://www.lautjournal.info/RssFeeds/news_Accueil_manchettes.xml"/>
-	<outline text="L'autre information" title="L'autre information" description="" type="rss" version="RSS" htmlUrl="https://lautre.info/" xmlUrl="https://lautre.info/spip.php?page=backend"/>
 	<outline text="L'Étoile du Nord" title="L'Étoile du Nord" description="" type="rss" version="RSS" htmlUrl="https://etoiledunord.media/" xmlUrl="https://etoiledunord.media/feed/"/>
 	<outline text="La Grande Démission" title="La Grande Démission" description="" type="rss" version="RSS" htmlUrl="https://grandedemission.info/" xmlUrl="https://grandedemission.info/feed/"/>
 	<outline text="Liberté ouvrière" title="Liberté ouvrière" description="" type="rss" version="RSS" htmlUrl="https://liberteouvriere.com/" xmlUrl="https://liberteouvriere.com/feed/"/>
