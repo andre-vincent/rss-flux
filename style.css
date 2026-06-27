@@ -8,9 +8,19 @@
     --border-color: #707070;    /* Bordures visibles */
     --hover-bg: #e6e6e6;
 }
-
+/* ====================================
+   Reset et Structure
+   ==================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Avenir Next, Bahnschrift, Montserrat, "URW Gothic",
+    source-sans-pro, system-ui, sans-serif;
     margin: 0;
     display: flex;
     height: 100vh;
