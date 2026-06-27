@@ -1,16 +1,16 @@
 :root {
-    /* Couleurs à haut contraste */
-    --bg-main: #ffffff;           /* Fond blanc pur */
-    --bg-sidebar: #f8f9fa;      /* Gris très clair pour la structure */
-    --text-main: #1a1a1a;       /* Noir doux pour éviter la fatigue visuelle tout en restant contrasté */
-    --text-meta: #4d4d4d;       /* Gris foncé (Contraste > 7:1 sur blanc) */
-    --accent-color: #002db3;    /* Bleu profond pour les liens et titres */
-    --border-color: #707070;    /* Bordures visibles */
-    --hover-bg: #e6e6e6;
+  /* Couleurs à haut contraste */
+  --bg-main: #ffffff; /* Fond blanc pur */
+  --bg-sidebar: #f8f9fa; /* Gris très clair pour la structure */
+  --text-main: #1a1a1a; /* Noir doux pour éviter la fatigue visuelle tout en restant contrasté */
+  --text-meta: #4d4d4d; /* Gris foncé (Contraste > 7:1 sur blanc) */
+  --accent-color: #002db3; /* Bleu profond pour les liens et titres */
+  --border-color: #707070; /* Bordures visibles */
+  --hover-bg: #e6e6e6;
 }
-/* ====================================
+/* =======================
    Reset et Structure
-   ==================================== */
+   ======================= */
 *,
 *::before,
 *::after {
@@ -18,115 +18,129 @@
   margin: 0;
   padding: 0;
 }
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
 body {
-    font-family: Avenir Next, Bahnschrift, Montserrat, "URW Gothic",
+  font-family: Avenir Next, Bahnschrift, Montserrat, "URW Gothic",
     source-sans-pro, system-ui, sans-serif;
-    margin: 0;
-    display: flex;
-    height: 100vh;
-    color: var(--text-main);
-    background-color: var(--bg-main);
-    line-height: 1.6; /* Améliore la lisibilité */
+  margin: 0;
+  display: flex;
+  height: 100vh;
+  color: var(--text-main);
+  background-color: var(--bg-main);
+  line-height: 1.6; /* Améliore la lisibilité */
 }
 
 /* Barre latérale */
 #sidebar {
-    width: 280px;
-    background: var(--bg-sidebar);
-    border-right: 2px solid var(--border-color); /* Bordure renforcée */
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
+  width: 280px;
+  background: var(--bg-sidebar);
+  border-right: 2px solid var(--border-color); /* Bordure renforcée */
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
 }
 
-#sidebar h2 {
-    color: var(--text-main);
-    font-size: 1.5rem;
-    border-bottom: 2px solid var(--text-main);
-    padding-bottom: 10px;
+#sidebar h1 {
+  color: var(--text-main);
+  font-size: 1.5rem;
+  border-bottom: 2px solid var(--text-main);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 #feed-menu {
-    display: flex;
-    flex-direction: column;
-    gap: 12px; /* Espacement accru pour faciliter le clic */
-    overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* Espacement accru pour faciliter le clic */
+  overflow-y: auto;
 }
 
 #feed-menu button {
-    text-align: left;
-    padding: 12px;
-    border: 2px solid var(--accent-color); /* Boutons clairement délimités */
-    background: var(--bg-main);
-    color: var(--accent-color);
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.2s;
+  text-align: left;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--accent-color); /* Boutons clairement délimités */
+  background: var(--bg-main);
+  color: var(--accent-color);
+  border-radius: 0.5em;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
 }
 
-#feed-menu button:hover, 
+#feed-menu button:hover,
 #feed-menu button:focus {
-    background: var(--accent-color);
-    color: var(--bg-main);
-    outline: 3px solid orange; /* Indicateur de focus pour la navigation au clavier */
+  background: var(--accent-color);
+  color: var(--bg-main);
+  outline: 3px solid orange; /* Indicateur de focus pour la navigation au clavier */
 }
 
 /* Zone principale */
 #main-content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 40px;
+  flex: 1;
+  overflow-y: auto;
+  padding: 40px;
 }
 
 #feed-title {
-    color: var(--text-main);
-    font-size: 2rem;
-    margin-bottom: 30px;
+  color: var(--text-main);
+  font-size: 2rem;
+  margin-bottom: 30px;
 }
 
 #articles-container {
-    max-width: 75ch; /* Largeur optimale pour la lecture (environ 75 caractères) */
-    margin: 0 auto;
+  max-width: 75ch; /* Largeur optimale pour la lecture (environ 75 caractères) */
+  margin: 0 auto;
 }
 
 .feed-item {
-    margin-bottom: 50px;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 30px;
+  margin-bottom: 50px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 30px;
 }
 
 /* Liens contrastés */
 .feed-item h3 a {
-    color: var(--accent-color);
-    text-decoration: underline; /* Soulignage pour identifier le lien sans dépendre de la couleur */
+  color: var(--accent-color);
+  text-decoration: underline; /* Soulignage pour identifier le lien sans dépendre de la couleur */
 }
 
 .feed-item h3 a:hover {
-    color: #001a66;
-    text-decoration: none;
+  color: #001a66;
+  text-decoration: none;
 }
 
 .feed-item .meta {
-    font-size: 0.95rem;
-    color: var(--text-meta);
-    margin: 12px 0;
-    font-weight: 500;
+  font-size: 0.95rem;
+  color: var(--text-meta);
+  margin: 12px 0;
+  font-weight: 500;
 }
 
 .feed-item .description {
-    font-size: 1.1rem;
-    color: var(--text-main);
+  font-size: 1.1rem;
+  color: var(--text-main);
 }
 
 /* Accessibilité du loader */
 .loader {
-    width: 40px;
-    height: 40px;
-    border: 4px solid #ccc;
-    border-top: 4px solid var(--accent-color);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
+  width: 40px;
+  height: 40px;
+  border: 4px solid #ccc;
+  border-top: 4px solid var(--accent-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
