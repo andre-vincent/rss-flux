@@ -5,11 +5,13 @@
 		<title>Subscriptions-QUÉBEC.opml</title>
 	</head>
 <body>
-	<outline text="L’autre information" title="L’autre information" description="" type="rss" version="RSS" htmlUrl="https://lautre.info/" xmlUrl="https://lautre.info/spip.php?page=backend"/>	<outline text="À bâbord !" title="À bâbord !" description="" type="rss" version="RSS" htmlUrl="https://www.ababord.org/" xmlUrl="https://www.ababord.org/spip.php?page=backend"/>
+	<outline text="L’autre information" title="L’autre information" description="" type="rss" version="RSS" htmlUrl="https://lautre.info/" xmlUrl="https://lautre.info/spip.php?page=backend"/>	
+	<outline text="À bâbord !" title="À bâbord !" description="" type="rss" version="RSS" htmlUrl="https://www.ababord.org/" xmlUrl="https://www.ababord.org/spip.php?page=backend"/>
 	<outline text="Archives Révolutionnaires" title="Archives Révolutionnaires" description="" type="rss" version="RSS" htmlUrl="https://archivesrevolutionnaires.com/" xmlUrl="https://archivesrevolutionnaires.com/feed/"/>
 	<outline text="Centre Internationaliste Ryerson Fondation Aubin" title="Centre Internationaliste Ryerson Fondation Aubin" description="" type="rss" version="RSS" htmlUrl="https://centreinternationalisterfa.org/" xmlUrl="https://centreinternationalisterfa.org/feed/"/>
 	<outline text="Communiqué – QS" title="Communiqué – QS" description="" type="rss" version="RSS" htmlUrl="https://api-wp.quebecsolidaire.net/" xmlUrl="https://api-wp.quebecsolidaire.net/feed/?post_type=articles&amp;types=communiques-de-presse"/>
 	<outline text="Échec à la guerre" title="Échec à la guerre" description="" type="rss" version="RSS" htmlUrl="https://echecalaguerre.org/" xmlUrl="https://echecalaguerre.org/feed/"/>
+	<outline text="Contretemps" title="Contretemps" description="" type="rss" version="RSS" htmlUrl="https://www.contretemps.eu" xmlUrl="https://www.contretemps.eu/feed/"/>
 	<outline text="IRIS" title="IRIS" description="" type="rss" version="RSS" htmlUrl="https://iris-recherche.qc.ca/" xmlUrl="https://iris-recherche.qc.ca/feed/"/>
 	<outline text="Journal des Alternatives" title="Journal des Alternatives" description="" type="rss" version="RSS" htmlUrl="https://alter.quebec/" xmlUrl="https://alter.quebec/feed/"/>
 	<outline text="Journal le Mouton Noir" title="Journal le Mouton Noir" description="" type="rss" version="RSS" htmlUrl="https://www.moutonnoir.com/" xmlUrl="https://www.moutonnoir.com/feed/"/>
