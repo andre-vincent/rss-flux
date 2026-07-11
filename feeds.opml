@@ -5,7 +5,7 @@
 		<title>Subscriptions-QUÉBEC.opml</title>
 	</head>
 <body>
-	<outline text="L’autre information" title="L’autre information" description="" type="rss" version="RSS" htmlUrl="https://lautre.info/" xmlUrl="https://lautre.info/spip.php?page=backend"/>	
+	<outline text="Média de gauche" title="L’autre information" description="" type="rss" version="RSS" htmlUrl="https://gauche.media/" xmlUrl="https://gauche.media/spip.php?page=backend"/>	
 	<outline text="À bâbord !" title="À bâbord !" description="" type="rss" version="RSS" htmlUrl="https://www.ababord.org/" xmlUrl="https://www.ababord.org/spip.php?page=backend"/>
 	<outline text="Archives Révolutionnaires" title="Archives Révolutionnaires" description="" type="rss" version="RSS" htmlUrl="https://archivesrevolutionnaires.com/" xmlUrl="https://archivesrevolutionnaires.com/feed/"/>
 	<outline text="Centre Internationaliste Ryerson Fondation Aubin" title="Centre Internationaliste Ryerson Fondation Aubin" description="" type="rss" version="RSS" htmlUrl="https://centreinternationalisterfa.org/" xmlUrl="https://centreinternationalisterfa.org/feed/"/>
