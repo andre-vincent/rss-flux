@@ -1,11 +1,14 @@
 const OPML_FILE = 'feeds.opml';
 const CORS_PROXY = 'https://allorigins.win';
 
+// Stockage de l'état de l'application
 let articlesEnCours = [];
+let indexArticleSelectionne = -1;
 
 document.addEventListener('DOMContentLoaded', () => {
     initNetNewsWire();
     initThemeToggle();
+    initRaccourcisClavier();
 });
 
 async function initNetNewsWire() {
@@ -83,6 +86,9 @@ async function chargerFluxDansTimeline(url, feedTitle) {
     viewer.innerHTML = '<div class="empty-viewer"><p>Aucun article sélectionné</p></div>';
     document.getElementById('article-external-link').classList.add('hidden');
 
+    // Réinitialisation de l'état de sélection
+    indexArticleSelectionne = -1;
+
     try {
         const response = await fetch(`${CORS_PROXY}${encodeURIComponent(url)}`);
         const data = await response.json();
@@ -113,6 +119,7 @@ async function chargerFluxDansTimeline(url, feedTitle) {
 
             const itemDiv = document.createElement('div');
             itemDiv.className = 'timeline-item';
+            itemDiv.setAttribute('data-index', index); // Utile pour cibler l'élément via les touches
             itemDiv.innerHTML = `
                 <div class="feed-source">${feedTitle}</div>
                 <h4>${title}</h4>
@@ -120,9 +127,7 @@ async function chargerFluxDansTimeline(url, feedTitle) {
             `;
 
             itemDiv.addEventListener('click', () => {
-                document.querySelectorAll('.timeline-item').forEach(i => i.classList.remove('is-active'));
-                itemDiv.classList.add('is-active');
-                afficherArticleDansViewer(index, feedTitle);
+                selectionnerArticle(index, feedTitle);
             });
 
             timeline.appendChild(itemDiv);
@@ -131,6 +136,23 @@ async function chargerFluxDansTimeline(url, feedTitle) {
     } catch (e) {
         timeline.innerHTML = '<p class="status-msg">Erreur de flux.</p>';
     }
+}
+
+function selectionnerArticle(index, feedTitle) {
+    if (index < 0 || index >= articlesEnCours.length) return;
+    
+    indexArticleSelectionne = index;
+
+    // Mise à jour visuelle de la sélection dans la timeline
+    document.querySelectorAll('.timeline-item').forEach(i => i.classList.remove('is-active'));
+    const itemSelectionne = document.querySelector(`.timeline-item[data-index="${index}"]`);
+    if (itemSelectionne) {
+        itemSelectionne.classList.add('is-active');
+        // Fait défiler la timeline automatiquement si l'élément sort de l'écran avec les touches
+        itemSelectionne.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+
+    afficherArticleDansViewer(index, feedTitle);
 }
 
 function afficherArticleDansViewer(index, feedTitle) {
@@ -150,6 +172,42 @@ function afficherArticleDansViewer(index, feedTitle) {
         <hr style="border: 0; border-top: 1px solid var(--border-color); margin-bottom: 20px;">
         <div class="article-view-content">${article.content}</div>
     `;
+    
+    // Remonte le défilement de la liseuse en haut à chaque nouvel article
+    viewer.scrollTop = 0;
+}
+
+function initRaccourcisClavier() {
+    window.addEventListener('keydown', (e) => {
+        // Si l'utilisateur n'a chargé aucun article, les raccourcis ne font rien
+        if (articlesEnCours.length === 0) return;
+
+        const touche = e.key.toLowerCase();
+        const currentFeedTitle = document.getElementById('timeline-title').textContent;
+
+        if (touche === 'arrowdown' || touche === 'j') {
+            e.preventDefault();
+            const nouvelIndex = indexArticleSelectionne + 1;
+            if (nouvelIndex < articlesEnCours.length) {
+                selectionnerArticle(nouvelIndex, currentFeedTitle);
+            }
+        } 
+        else if (touche === 'arrowup' || touche === 'k') {
+            e.preventDefault();
+            const nouvelIndex = indexArticleSelectionne - 1;
+            if (nouvelIndex >= 0) {
+                selectionnerArticle(nouvelIndex, currentFeedTitle);
+            }
+        } 
+        else if (e.key === ' ' || e.code === 'Space') {
+            // La touche Espace fait descendre la liseuse (Viewer) d'une hauteur d'écran
+            const viewer = document.getElementById('viewer-container');
+            if (viewer && indexArticleSelectionne !== -1) {
+                e.preventDefault();
+                viewer.scrollBy({ top: window.innerHeight * 0.6, behavior: 'smooth' });
+            }
+        }
+    });
 }
 
 function initThemeToggle() {
