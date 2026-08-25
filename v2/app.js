@@ -4,7 +4,7 @@
  * @description Lecteur RSS autonome avec cache RAM, raccourcis macOS et conversion rss2json.
  */
 
-const OPML_FILE = "https://andre-vincent.github.io/rss-flux/feeds.opml";
+const OPML_FILE = "feeds.opml";
 const API_PROXY = "https://api.rss2json.com/v1/api.json?rss_url=";
 
 // Gestion de l'état global et du cache temporaire en mémoire vive (RAM)
