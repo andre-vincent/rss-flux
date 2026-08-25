@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetNewsWire Web</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="nnw-container">
+        <!-- Colonne 1 : Les Flux (Sidebar) -->
+        <aside class="nnw-sidebar">
+            <div class="column-header">
+                <h2>Flux RSS</h2>
+            </div>
+            <ul id="categories-menu" class="scrollable-content menu-root">
+                <li class="status-msg">Chargement de l'OPML...</li>
+            </ul>
+            <div class="sidebar-footer">
+                <button id="theme-toggle" class="theme-btn" aria-label="Changer de thème">
+                    <span class="icon-light">☀️ Mode Clair</span>
+                    <span class="icon-dark">🌙 Mode Sombre</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Colonne 2 : La Chronologie (Timeline) -->
+        <section class="nnw-timeline">
+            <div class="column-header">
+                <h2 id="timeline-title">Articles</h2>
+            </div>
+            <div id="timeline-container" class="scrollable-content timeline-list">
+                <p class="status-msg">Sélectionnez un flux dans la barre latérale.</p>
+            </div>
+        </section>
+
+        <!-- Colonne 3 : La liseuse (Article Viewer) -->
+        <main class="nnw-viewer">
+            <div class="column-header viewer-header">
+                <span id="article-site-source" class="site-badge">NetNewsWire Web</span>
+                <a id="article-external-link" href="#" target="_blank" rel="noopener" class="mac-btn hidden">Ouvrir l'original ↗</a>
+            </div>
+            <div id="viewer-container" class="scrollable-content viewer-body">
+                <div class="empty-viewer">
+                    <p>Aucun article sélectionné</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
