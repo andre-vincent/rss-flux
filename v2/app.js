@@ -1,5 +1,11 @@
-const OPML_FILE = 'feeds.opml';
-const CORS_PROXY = 'https://allorigins.win';
+/**
+ * NetNewsWire Web Reader
+ * @version v1.0
+ * @description Lecteur RSS autonome avec cache RAM, raccourcis macOS et conversion rss2json.
+ */
+
+const OPML_FILE = "https://andre-vincent.github.io/rss-flux/feeds.opml";
+const API_PROXY = "https://api.rss2json.com/v1/api.json?rss_url=";
 
 // Gestion de l'état global et du cache temporaire en mémoire vive (RAM)
 let articlesEnCours = [];
@@ -56,6 +62,7 @@ async function initNetNewsWire() {
                 const feedTitle = feed.getAttribute('text') || feed.getAttribute('title');
                 let xmlUrl = feed.getAttribute('xmlUrl');
 
+                // Nettoyage des entités HTML pour décoder les esperluettes (&amp;)
                 const txtNode = document.createElement('textarea');
                 txtNode.innerHTML = xmlUrl;
                 xmlUrl = txtNode.value;
@@ -63,7 +70,9 @@ async function initNetNewsWire() {
                 const subLi = document.createElement('li');
                 const btn = document.createElement('button');
                 btn.className = 'flux-btn';
-                btn.textContent = `📰 ${feedTitle}`;
+                btn.textContent = feedTitle;
+                btn.classList.add('flux-btn-rss');
+
 
                 btn.addEventListener('click', () => {
                     document.querySelectorAll('.flux-btn').forEach(b => b.classList.remove('is-active'));
@@ -97,7 +106,7 @@ async function chargerFluxDansTimeline(url, feedTitle) {
     document.getElementById('article-external-link').classList.add('hidden');
     indexArticleSelectionne = -1;
 
-    // Récupération instantanée si le flux est déjà présent en mémoire vive (RAM)
+    // Récupération instantanée si le flux est déjà en mémoire (RAM Cache)
     if (cacheFluxRSS[url]) {
         articlesEnCours = cacheFluxRSS[url];
         genererTimelineHTML(timeline, feedTitle);
@@ -107,37 +116,28 @@ async function chargerFluxDansTimeline(url, feedTitle) {
     timeline.innerHTML = '<p class="status-msg">Mise à jour en direct...</p>';
 
     try {
-        const response = await fetch(`${CORS_PROXY}${encodeURIComponent(url)}`);
+        // CORRECTION : Appel direct de votre proxy rss2json fonctionnel
+        const response = await fetch(`${API_PROXY}${encodeURIComponent(url)}`);
         if (!response.ok) throw new Error('Erreur proxy');
         
         const data = await response.json();
-        const xmlText = data.contents;
-        if (!xmlText) throw new Error('XML vide');
-
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(xmlText, "text/xml");
-        if (xmlDoc.querySelector('parsererror')) throw new Error('Erreur XML');
         
-        const items = xmlDoc.querySelectorAll('item, entry');
-        articlesEnCours = [];
-
-        if (!items || items.length === 0) {
+        if (data.status !== "ok" || !data.items || data.items.length === 0) {
             timeline.innerHTML = '<p class="status-msg">Aucun article trouvé dans ce flux.</p>';
             return;
         }
 
-        items.forEach(item => {
-            const title = item.querySelector('title')?.textContent || 'Sans titre';
-            let link = item.querySelector('link')?.textContent || '#';
-            if (item.querySelector('link')?.getAttribute('href')) {
-                link = item.querySelector('link').getAttribute('href');
-            }
-            
-            const rawDescription = item.querySelector('description')?.textContent || 
-                                   item.querySelector('summary')?.textContent || 
-                                   item.querySelector('content')?.textContent || '';
+        articlesEnCours = [];
 
-            articlesEnCours.push({ title, link, content: rawDescription });
+        // Adaptation de la structure aux données JSON fournies par rss2json
+        data.items.forEach(item => {
+            articlesEnCours.push({
+                title: item.title || 'Sans titre',
+                link: item.link || '#',
+                content: item.description || item.content || '',
+                author: item.author || 'Anonyme',
+                pubDate: item.pubDate ? new Date(item.pubDate).toLocaleDateString("fr-CA") : ''
+            });
         });
 
         // Stockage dans le cache local de la session
@@ -146,13 +146,14 @@ async function chargerFluxDansTimeline(url, feedTitle) {
 
     } catch (e) {
         console.error(e);
-        timeline.innerHTML = `<p class="status-msg" style="color:var(--accent);">Erreur de connexion au flux.<br><small style="font-size:0.75rem;display:block;margin-top:5px;color:var(--text-muted);">Blocage CORS ou serveur saturé.</small></p>`;
+        timeline.innerHTML = `<p class="status-msg" style="color:var(--accent);">Erreur de connexion au flux.<br><small style="font-size:0.75rem;display:block;margin-top:5px;color:var(--text-muted);">Le service RSS2JSON rencontre des difficultés avec ce lien.</small></p>`;
     }
 }
 
 function genererTimelineHTML(container, feedTitle) {
     container.innerHTML = '';
     articlesEnCours.forEach((article, index) => {
+        // Extraction d'un extrait textuel court sans les balises graphiques
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = article.content;
         const snippetText = tempDiv.textContent.trim().substring(0, 80);
@@ -195,8 +196,12 @@ function selectionnerArticle(index, feedTitle) {
     linkBtn.href = article.link;
     linkBtn.classList.remove('hidden');
 
+    // Inclusion optionnelle des métadonnées (auteur, date) dans la liseuse
+    const metaHTML = article.pubDate ? `<div class="article-meta" style="font-size:0.85rem;color:var(--text-muted);margin-bottom:15px;">Par ${article.author} — ${article.pubDate}</div>` : '';
+
     viewer.innerHTML = `
         <h1 class="article-view-title">${article.title}</h1>
+        ${metaHTML}
         <hr style="border: 0; border-top: 1px solid var(--border-color); margin-bottom: 20px;">
         <div class="article-view-content">${article.content}</div>
     `;
