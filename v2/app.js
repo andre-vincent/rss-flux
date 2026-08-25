@@ -1,8 +1,10 @@
 const OPML_FILE = 'feeds.opml';
 const CORS_PROXY = 'https://allorigins.win';
 
+// Gestion de l'état global et du cache temporaire en mémoire vive (RAM)
 let articlesEnCours = [];
 let indexArticleSelectionne = -1;
+const cacheFluxRSS = {}; // Format : { "http://url-du-flux": [...] }
 
 document.addEventListener('DOMContentLoaded', () => {
     initNetNewsWire();
@@ -21,12 +23,10 @@ async function initNetNewsWire() {
         const xmlDoc = parser.parseFromString(opmlText, "text/xml");
         
         menuContainer.innerHTML = '';
-        
-        // Sélection large pour être compatible avec tous les formats d'OPML
         const categories = xmlDoc.querySelectorAll('body > outline, opml > body > outline');
 
         if (categories.length === 0) {
-            menuContainer.innerHTML = '<li class="status-msg">Aucune catégorie trouvée dans le fichier OPML.</li>';
+            menuContainer.innerHTML = '<li class="status-msg">Aucune catégorie trouvée dans l\'OPML.</li>';
             return;
         }
 
@@ -39,7 +39,7 @@ async function initNetNewsWire() {
             liGroup.className = 'menu-group';
 
             const details = document.createElement('details');
-            if (index === 0) details.open = true; // Ouvre la première catégorie par défaut
+            if (index === 0) details.open = true;
 
             const summary = document.createElement('summary');
             summary.innerHTML = `
@@ -56,7 +56,6 @@ async function initNetNewsWire() {
                 const feedTitle = feed.getAttribute('text') || feed.getAttribute('title');
                 let xmlUrl = feed.getAttribute('xmlUrl');
 
-                // Nettoyage des entités HTML pour décoder les esperluettes (&amp;)
                 const txtNode = document.createElement('textarea');
                 txtNode.innerHTML = xmlUrl;
                 xmlUrl = txtNode.value;
@@ -87,72 +86,92 @@ async function initNetNewsWire() {
         menuContainer.innerHTML = '<li class="status-msg">Erreur de lecture de l\'OPML.</li>';
     }
 }
+
 async function chargerFluxDansTimeline(url, feedTitle) {
     const timeline = document.getElementById('timeline-container');
     const timelineTitle = document.getElementById('timeline-title');
     const viewer = document.getElementById('viewer-container');
     
     timelineTitle.textContent = feedTitle;
-    timeline.innerHTML = '<p class="status-msg">Mise à jour...</p>';
     viewer.innerHTML = '<div class="empty-viewer"><p>Aucun article sélectionné</p></div>';
     document.getElementById('article-external-link').classList.add('hidden');
-
     indexArticleSelectionne = -1;
+
+    // Récupération instantanée si le flux est déjà présent en mémoire vive (RAM)
+    if (cacheFluxRSS[url]) {
+        articlesEnCours = cacheFluxRSS[url];
+        genererTimelineHTML(timeline, feedTitle);
+        return;
+    }
+
+    timeline.innerHTML = '<p class="status-msg">Mise à jour en direct...</p>';
 
     try {
         const response = await fetch(`${CORS_PROXY}${encodeURIComponent(url)}`);
-        const data = await response.json();
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(data.contents, "text/xml");
+        if (!response.ok) throw new Error('Erreur proxy');
         
-        // Support large des balises RSS (item) et Atom (entry)
-        const items = xmlDoc.querySelectorAll('item, entry');
+        const data = await response.json();
+        const xmlText = data.contents;
+        if (!xmlText) throw new Error('XML vide');
 
-        timeline.innerHTML = '';
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+        if (xmlDoc.querySelector('parsererror')) throw new Error('Erreur XML');
+        
+        const items = xmlDoc.querySelectorAll('item, entry');
         articlesEnCours = [];
 
         if (!items || items.length === 0) {
-            timeline.innerHTML = '<p class="status-msg">Aucun article trouvé.</p>';
+            timeline.innerHTML = '<p class="status-msg">Aucun article trouvé dans ce flux.</p>';
             return;
         }
 
-        items.forEach((item, index) => {
+        items.forEach(item => {
             const title = item.querySelector('title')?.textContent || 'Sans titre';
-            
             let link = item.querySelector('link')?.textContent || '#';
             if (item.querySelector('link')?.getAttribute('href')) {
                 link = item.querySelector('link').getAttribute('href');
             }
             
-            const rawDescription = item.querySelector('description, summary, content')?.textContent || '';
-
-            // Génération de l'aperçu textuel pour la ligne de la timeline
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = rawDescription;
-            const snippetText = tempDiv.textContent.trim().substring(0, 80);
+            const rawDescription = item.querySelector('description')?.textContent || 
+                                   item.querySelector('summary')?.textContent || 
+                                   item.querySelector('content')?.textContent || '';
 
             articlesEnCours.push({ title, link, content: rawDescription });
-
-            const itemDiv = document.createElement('div');
-            itemDiv.className = 'timeline-item';
-            itemDiv.setAttribute('data-index', index);
-            itemDiv.innerHTML = `
-                <div class="feed-source">${feedTitle}</div>
-                <h4>${title}</h4>
-                <div class="snippet">${snippetText ? snippetText + '...' : 'Lire la suite'}</div>
-            `;
-
-            itemDiv.addEventListener('click', () => {
-                selectionnerArticle(index, feedTitle);
-            });
-
-            timeline.appendChild(itemDiv);
         });
+
+        // Stockage dans le cache local de la session
+        cacheFluxRSS[url] = articlesEnCours;
+        genererTimelineHTML(timeline, feedTitle);
 
     } catch (e) {
         console.error(e);
-        timeline.innerHTML = '<p class="status-msg">Erreur de connexion au flux (blocage CORS).</p>';
+        timeline.innerHTML = `<p class="status-msg" style="color:var(--accent);">Erreur de connexion au flux.<br><small style="font-size:0.75rem;display:block;margin-top:5px;color:var(--text-muted);">Blocage CORS ou serveur saturé.</small></p>`;
     }
+}
+
+function genererTimelineHTML(container, feedTitle) {
+    container.innerHTML = '';
+    articlesEnCours.forEach((article, index) => {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = article.content;
+        const snippetText = tempDiv.textContent.trim().substring(0, 80);
+
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'timeline-item';
+        itemDiv.setAttribute('data-index', index);
+        itemDiv.innerHTML = `
+            <div class="feed-source">${feedTitle}</div>
+            <h4>${article.title}</h4>
+            <div class="snippet">${snippetText ? snippetText + '...' : 'Lire l\'article'}</div>
+        `;
+
+        itemDiv.addEventListener('click', () => {
+            selectionnerArticle(index, feedTitle);
+        });
+
+        container.appendChild(itemDiv);
+    });
 }
 
 function selectionnerArticle(index, feedTitle) {
